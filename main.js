@@ -30,7 +30,7 @@ let cards = [];
 
 const countStars = (rating) => {
     const stars = [];
-    for (let i = 1; i <= rating; i++) {
+    for (let i = 1; i <= rating && i <= 5; i++) {
         stars.push('<span>⭐</span>');
     }
     return stars.join('');
@@ -43,7 +43,7 @@ const createCardTemplate = (technology, index) => `
       <img src="${technology.logo}" alt="${technology.name} logo" />
     </div>
     <div class="score-container">
-${countStars(technology.score)}
+${countStars(technology.score)} (${technology.reviews} opiniones)
     </div>
   </div>`;
 
@@ -58,6 +58,7 @@ const populateGallery = (galleryContentList) => {
         $gallery.innerHTML += cardTemplate;
         const thisCard = document.querySelector(`#card-${index}`);
         thisCard.addEventListener('click', showModal);
+        // thisCard.style.border = '1px solid blue';
     });
 };
 
