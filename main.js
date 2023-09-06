@@ -7,7 +7,7 @@ const $app = document.querySelector('#app');
 
 const createContainerTemplate = () => `
 <div id="gallery-container" class="gallery-container">
-  <h1>Loading...</h1>
+  <img src="public/assets/Loading-bar.gif" id="loading-bar" />
 </div>`;
 
 const createModalTemplate = () => `
@@ -24,8 +24,10 @@ $app.innerHTML += createModalTemplate();
 
 // LOGIC
 const $gallery = document.querySelector('#gallery-container');
-const $loading = document.querySelector('h1');
+const $loading = document.querySelector('#loading-bar');
 const $modal = document.querySelector('#modal');
+const $modalTitle = document.querySelector('.modal-title');
+const $modalBody = document.querySelector('.modal-body');
 let cards = [];
 
 const countStars = (rating) => {
@@ -36,29 +38,30 @@ const countStars = (rating) => {
     return stars.join('');
 };
 
-const createCardTemplate = (technology, index) => `
-  <div class="card" id="card-${index}" role="button">
+const createCardTemplate = (technology, $padre) => {
+    const divCard = document.createElement('div');
+
+    divCard.classList.add('card');
+    divCard.setAttribute('id', `${technology.id}`);
+
+    divCard.innerHTML = `
   <h3>${technology.name}</h3>
-    <div class="image-container">
-      <img src="${technology.logo}" alt="${technology.name} logo" />
-    </div>
-    <div class="score-container">
-${countStars(technology.score)} (${technology.reviews} opiniones)
-    </div>
+  <div class="image-container">
+    <img src="${technology.logo + `?random=${technology.id}`}" alt="${technology.name} logo" />
+  </div>
+  <div class="score-container">
+    ${countStars(technology.score)} (${technology.reviews} opiniones)
   </div>`;
 
-const showModal = () => {
-    $modal.style.display = 'block';
+    divCard.addEventListener('click', showModal);
+
+    $padre.appendChild(divCard);
 };
 
 const populateGallery = (galleryContentList) => {
     $loading.remove();
     galleryContentList.forEach((item, index) => {
-        const cardTemplate = createCardTemplate(item, index);
-        $gallery.innerHTML += cardTemplate;
-        const thisCard = document.querySelector(`#card-${index}`);
-        thisCard.addEventListener('click', showModal);
-        // thisCard.style.border = '1px solid blue';
+        createCardTemplate(item, $gallery);
     });
 };
 
@@ -75,6 +78,22 @@ const getTechnologies = async () => {
 
     cards = cardsData;
     populateGallery(cards);
+};
+
+const setModalData = (data) => {
+    $modalTitle.innerHTML = data.name;
+    $modalBody.innerHTML = `
+    <img src="${data.logo + `?random=${data.id}`}" alt="${data.name} logo" />
+    <p>Valorado con ${data.score} estrellas por ${data.reviews} usuarios.</p>
+    `;
+};
+
+const showModal = (event) => {
+    const cardId = event.target.id;
+    const cardData = cards.find((card) => card.id === cardId);
+    setModalData(cardData);
+    console.log(cardData);
+    $modal.style.display = 'block';
 };
 
 const addModalListener = () => {
