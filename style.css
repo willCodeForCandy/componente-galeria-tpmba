@@ -56,6 +56,17 @@ img {
     text-align: center;
 }
 
+.modal-img {
+    max-height: 45vh;
+    overflow: hidden;
+}
+
+.modal-img img {
+    object-fit: contain;
+    height: 100%;
+    width: auto;
+}
+
 .modal-close-btn {
     position: absolute;
     top: 0.5rem;

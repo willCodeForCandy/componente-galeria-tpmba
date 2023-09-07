@@ -83,7 +83,9 @@ const getTechnologies = async () => {
 const setModalData = (data) => {
     $modalTitle.innerHTML = data.name;
     $modalBody.innerHTML = `
-    <img src="${data.logo + `?random=${data.id}`}" alt="${data.name} logo" />
+    <div class="modal-img">
+      <img src="${data.logo + `?random=${data.id}`}" alt="${data.name} logo" />
+    </div>
     <p>Valorado con ${data.score} estrellas por ${data.reviews} usuarios.</p>
     `;
 };
